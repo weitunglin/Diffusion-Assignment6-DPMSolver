@@ -33,7 +33,7 @@ Install the required package within the `requirements.txt`
 pip install -r requirements.txt
 ```
 
-**Please note that this assignment is heavily dependent on Assignment 2. To begin, you should copy the functions you implemented in [Assignment 2](https://github.com/KAIST-Visual-AI-Group/Diffusion-Assignment2-DDIM-CFG).** 
+
 
 ## Code Structure
 
