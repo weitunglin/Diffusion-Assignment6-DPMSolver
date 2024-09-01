@@ -100,7 +100,7 @@ $$
 
 where $\hat{x}\_\lambda := x\_{t(\lambda)}$ and $\hat{\epsilon}\_\theta (\hat{x}_\lambda, \lambda):= \epsilon\_\theta (x\_{t(\lambda)}, t(\lambda))$.
 
-Now the simplified solution reveals the integral is represented as the _exponentially weighted integral of $\hat{\epsilon}_\theta$, which is closely related to the _exponential integrators_ commonly discussed in the literature of ODE solvers. 
+Now the simplified solution reveals the integral is represented as the _exponentially weighted integral_ of $\hat{\epsilon}_\theta$, which is closely related to the _exponential integrators_ commonly discussed in the literature of ODE solvers. 
 
 We can apply a Taylor expansion into the solution:
 
