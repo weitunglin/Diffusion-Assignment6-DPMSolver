@@ -4,7 +4,7 @@
   </h1>
   <p>
     <a href=https://mhsung.github.io/kaist-cs492d-fall-2024/ target="_blank"><b>KAIST CS492(D): Diffusion Models and Their Applications (Fall 2024)</b></a><br>
-    Programming Assignment 7
+    Programming Assignment 6
   </p>
 </div> 
 
@@ -19,9 +19,6 @@
    <img src="./assets/dpm_ddim.png">
 </div>
 
-  
-#### Due: TBD e.g., Mar 21 (Mon) 23:59 KST </b>
-#### Where to Submit: GradeScope
 
 ## Abstract
 DPM-Solver is a novel ordinary differential equation (ODE) solver that enhances the accuracy of solving ODEs for diffusion models in just a few steps. The core concept is to reveal that the ODE of diffusion models can be decomposed into a linear part and a non-linear (exponential) part. Given this insight, we can use a Taylor expansion to approximate the non-linear term. The higher order of the expansion, the more accurate the approximation. Interestingly, the authors also demonstrate that the first-order DPM-Solver is mathematically equivalent to DDIM. In this assignment, we will implement both a first-order and a secod-order DPM-Solver.
