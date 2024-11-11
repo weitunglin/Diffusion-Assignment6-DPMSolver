@@ -142,7 +142,7 @@ You can use `dpm_alphas`, `dpm_sigmas` and `dpm_lambdas` variables if needed.
 #### 1-2: Implement DPM-Solver-1
 Implement `first_order_step()` funciton in `2d_plot_dpm_todo/scheduler.py`. 
 
-#### 1-3: Implement DPM-Solver-2
+#### 1-3: Implement DPM-Solver-2 (Optional Task)
 Implement `second_order_step()` function in `2d_plot_dpm_todo/scheduler.py`. Since the $k\leq 2$ order DPM-Solver requires additoinal model predictions at intermediate timestep in each denoising step, you might need to call the network's forward function inside the scheduler. For this, you can refer to the example of `self.net_forward_fn()` in the code. 
 
 Note that you need to run sampling with 50 inference steps. The number of timesteps is divided by the order to ensure that the total number of function evaluations (NFE) is the same regardless of the order.
@@ -153,10 +153,10 @@ Take screenshots of:
 2. the Chamfer Distance reported after executing the Jupyter Notebook
 3. the visualization of the sampled particles.
 
-## Task 2: Conditonal Image Generation with DPM-Solver-2
+## Task 2: Conditonal Image Generation with DPM-Solver-1
 
 ### TODO
-After completing Task 1, finish implementing TODOs in `image_dpm_todo/model.py` and `image_dpm_todo/scheduler.py` for **CFG sampling** with **DPM-Solver-2**. Sample with the pre-trained diffusion model used in Assignment 2. 
+After completing Task 1, finish implementing TODOs in `image_dpm_todo/model.py` and `image_dpm_todo/scheduler.py` for **CFG sampling** with **DPM-Solver-1**. Sample with the pre-trained diffusion model used in Assignment 2. 
 
 ❗️❗️❗️ **You are only allowed to edit the part marked by TODO.** ❗️❗️❗️
 
@@ -186,12 +186,13 @@ Take a screenshot of a FID and include at least 8 sampled images.
 **Task 1**
 - [ ] Loss curve screenshot
 - [ ] Chamfer distance result of DPM-Solver-1
-- [ ] Chamfer distance result of DPM-Solver-2
-- [ ] Visualization of DPM-Solver-1 and DPM-Solver-2 samples
+- [ ] Visualization of DPM-Solver-1 samples
+- [ ] Chamfer distance result of DPM-Solver-2 (Optional)
+- [ ] Visualization of DPM-Solver-2 samples (Optional)
 
 
 **Task 2**
-- [ ] FID score results obtained with CFG scale of 7.5 and DPM-Solver-2
+- [ ] FID score results obtained with CFG scale of 7.5 and DPM-Solver-1
 - [ ] At least 8 generated images
 
 </details>
@@ -214,8 +215,8 @@ Submit the zip file on GradeScope.
 Otherwise, you will receive up to 20 points from this assignment that count toward your final grade.
 
 - Task 1
-  - 10 points: Achieve CD lower than 40 with both DPM-Solver-1 and DPM-Solver-2.
-  - 5 points: Achieve CD lower than 40 only with either DPM-Solver-1 or DPM-Solver-2.
+  - 10 points: Achieve CD lower than 40.
+  - 5 points: Achieve CD lower than 60.
   - 0 point: otherwise.
 - Task 2
   - 10 points: Achieve FID between **30**.
