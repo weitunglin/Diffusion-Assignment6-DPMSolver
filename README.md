@@ -36,14 +36,14 @@ pip install -r requirements.txt
 
 ```
 .
-├── 2d_plot_dpm_todo    (Task 1)
+├── 2d_plot_dpm_todo    
 │   ├── dpm_tutorial.ipynb        <--- Main code
 │   ├── dataset.py                <--- Define dataset (Swiss-roll, moon, gaussians, etc.)
 │   ├── network.py                <--- A noise prediction network
 │   ├── scheduler.py              <--- (TODO) Implement DPM-Solver scheduler
 │   └── model.py                  <--- Diffusion model wrapper
 │
-└── image_dpm_todo      (Task 2)
+└── image_dpm_todo      
     ├── dataset.py                <--- Ready-to-use AFHQ dataset code
     ├── model.py                  <--- (TODO) Diffusion model wrapper. Finish implementing CFG sampling.
     ├── scheduler.py              <--- (TODO) Finish implementing CFG sampling.
@@ -126,26 +126,19 @@ For $k \leq 2$, Taylor expansion needs additional intermediate points between $t
   <img width="800" alt="image" src="assets/dpm_solver_2_alg.png">
 </p>
 
-## Task 1: DPM-Solver-1 and DPM-Solver-2 with Swiss-Roll
-
-Now we will sample with DPM-Solver-$k$, specifically $k=1$ and $k=2$, in a toy experiment seutp. 
-
+## Task 1: Implementing DPM-Solver-1 
 
 ❗️❗️❗️ **You are only allowed to edit the part marked by TODO.** ❗️❗️❗️
-
-### TODO
 
 #### 1-1: Implement the forward pass of DPM-Solver.
 Implement `add_noise()` function in `2d_plot_dpm_todo/scheduler.py` based on Equation 2.1 in the DPM-Solver paper.
 You can use `dpm_alphas`, `dpm_sigmas` and `dpm_lambdas` variables if needed.
 
-#### 1-2: Implement DPM-Solver-1
+#### 1-2: Implement one step denoising of DPM-Solver-1
 Implement `first_order_step()` funciton in `2d_plot_dpm_todo/scheduler.py`. 
 
-#### 1-3: Implement DPM-Solver-2 (Optional Task)
-Implement `second_order_step()` function in `2d_plot_dpm_todo/scheduler.py`. Since the $k\leq 2$ order DPM-Solver requires additoinal model predictions at intermediate timestep in each denoising step, you might need to call the network's forward function inside the scheduler. For this, you can refer to the example of `self.net_forward_fn()` in the code. 
-
-Note that you need to run sampling with 50 inference steps. The number of timesteps is divided by the order to ensure that the total number of function evaluations (NFE) is the same regardless of the order.
+#### 1-3: Test DPM-Solver-1 on a Swiss-Roll distribution
+Once you finish implementing DPM-Solver-1, run `2d_plot_dpm_todo/dpm_tutorial.ipynb` to test DPM-Solver-1 on a Swiss-Roll distribution.
 
 Take screenshots of:
 
@@ -153,15 +146,11 @@ Take screenshots of:
 2. the Chamfer Distance reported after executing the Jupyter Notebook
 3. the visualization of the sampled particles.
 
-## Task 2: Conditonal Image Generation with DPM-Solver-1
-
-### TODO
-After completing Task 1, finish implementing TODOs in `image_dpm_todo/model.py` and `image_dpm_todo/scheduler.py` for **CFG sampling** with **DPM-Solver-1**. Sample with the pre-trained diffusion model used in Assignment 2. 
-
-❗️❗️❗️ **You are only allowed to edit the part marked by TODO.** ❗️❗️❗️
+#### 1-4: Conditional Image Generation with DPM-Solver-1
+We will now sample images using DPM-Solver-1 with the same CFG model trained in Assignment 2. Copy and paste your `model.py` implementation from Assignment 2 into the `image_dpm_todo` directory, and complete the TODOs in `image_dpm_todo/scheduler.py`. As in Assignment 2, sample images using the following command:
 
 ```
-python sampling.py --ckpt_path ${CKPT_PATH} --save_dir ${SAVE_DIR_PATH}
+python sampling.py --ckpt_path ${CKPT_PATH} --save_dir ${SAVE_DIR_PATH} --use_cfg
 ```
 
 Measure FID score:
@@ -175,6 +164,20 @@ Use the evaluation set of the AFHQ dataset, `data/afhq/eval`, not `data/afhq/val
 
 Take a screenshot of a FID and include at least 8 sampled images.
 
+
+## Task 2: Implementing DPM-Solver-2
+
+#### 2-1: Implement DPM-Solver-2 (Optional Task)
+Implement `second_order_step()` function in `2d_plot_dpm_todo/scheduler.py`. Since the $k\leq 2$ order DPM-Solver requires additoinal model predictions at intermediate timestep in each denoising step, you might need to call the network's forward function inside the scheduler. For this, you can refer to the example of `self.net_forward_fn()` in the code. 
+
+Note that you need to run sampling with 50 inference steps. The number of timesteps is divided by the order to ensure that the total number of function evaluations (NFE) is the same regardless of the order.
+
+#### 2-2: Test DPM-Solver-2 on a Swiss-Roll distribution
+Repeat the same process done in Task 1-3 but with DPM-Solver-2.
+
+#### 2-3: Conditional Image Generation with DPM-Solver-2
+Repeat the same process done in Task 1-4 but with DPM-Solver-2.
+
 ## What to Submit
 
 <details>
@@ -187,19 +190,19 @@ Take a screenshot of a FID and include at least 8 sampled images.
 - [ ] Loss curve screenshot
 - [ ] Chamfer distance result of DPM-Solver-1
 - [ ] Visualization of DPM-Solver-1 samples
-- [ ] Chamfer distance result of DPM-Solver-2 (Optional)
-- [ ] Visualization of DPM-Solver-2 samples (Optional)
-
-
-**Task 2**
 - [ ] FID score results obtained with CFG scale of 7.5 and DPM-Solver-1
-- [ ] At least 8 generated images
+- [ ] At least 8 generated images with DPM-Solver-1
+
+
+**Task 2 (Optional)**
+Repeat the above steps using DPM-Solver-2 instead of DPM-Solver-1.
+
 
 </details>
 
 In a single PDF file, write your name and student ID, and include submission items listed above. Refer to more detailed instructions written in each task section about what to submit.
 Name the document `{NAME}_{STUDENT_ID}.pdf` and submit **both your code and the document** as a **ZIP** file named `{NAME}_{STUDENT_ID}.zip`. 
-**Only for this programming assignment**, exclude any model checkpoints and the provided pre-trained classifier checkpoint when compressing the files.
+Exclude any model checkpoints and the provided pre-trained classifier checkpoint when compressing the files.
 Submit the zip file on GradeScope.
 
 ## Grading
@@ -215,14 +218,11 @@ Submit the zip file on GradeScope.
 Otherwise, you will receive up to 20 points from this assignment that count toward your final grade.
 
 - Task 1
-  - 10 points: Achieve CD lower than 40.
-  - 5 points: Achieve CD lower than 60.
+  - 10 points: Achieve CD lower than 40 on the Swiss-Roll distribution, and achieve FID less than 30 on image generation with CFG.
+  - 5 points: Either achieve CD between 40 and 60, or achieve FID between 30 and 50.
   - 0 point: otherwise.
 - Task 2
-  - 10 points: Achieve FID between **30**.
-  - 5 points: Achieve FID between **30** and **50**.
-  - 0 point: otherwise.
- 
+  - Same criteria as Task 1, but using DPM-Solver-2.
 
 ## Further Readings
 
