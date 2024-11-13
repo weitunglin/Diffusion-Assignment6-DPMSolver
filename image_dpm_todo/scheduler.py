@@ -230,7 +230,7 @@ class DPMSolverScheduler(BaseScheduler):
 
         ######## TODO ########
         # DO NOT change the code outside this part.
-        # Assignment 7. Implement the DPM forward step.
+        # Assignment 6. Implement the DPM forward step.
         x_t = x_0
 
         #######################
