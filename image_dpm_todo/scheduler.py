@@ -223,7 +223,6 @@ class DPMSolverScheduler(BaseScheduler):
             eps: [B,C,H,W]
         Output:
             x_t: [B,C,H,W]
-            eps: [B,C,H,W]
         """
         if eps is None:
             eps = torch.randn(x_0.shape, device=x_0.device)
