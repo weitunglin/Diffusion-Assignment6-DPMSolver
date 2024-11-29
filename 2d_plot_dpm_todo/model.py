@@ -19,7 +19,7 @@ class DiffusionModule(nn.Module):
     def get_loss(self, x0, class_label=None, noise=None):
         B = x0.shape[0]
         timestep = self.var_scheduler.uniform_sample_t(B, self.device)
-        x_noisy, noise = self.var_scheduler.add_noise(x0, timestep)
+        x_noisy = self.var_scheduler.add_noise(x0, timestep)
         if class_label is not None:
             noise_pred = self.network(x_noisy, timestep, class_label=class_label)
         else:
