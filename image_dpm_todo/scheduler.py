@@ -292,3 +292,7 @@ def interpolate_fn(x, xp, yp):
     ).squeeze(2)
     cand = start_y + (x - start_x) * (end_y - start_y) / (end_x - start_x)
     return cand
+
+# [11/29]: To resolve `can't get attribute DDIMScheduler` issue when loading a ckpt
+DDIMScheduler = DPMSolverScheduler
+DDPMScheduler = DPMSolverScheduler
