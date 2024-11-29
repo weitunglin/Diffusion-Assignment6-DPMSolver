@@ -150,7 +150,7 @@ Take screenshots of:
 We will now sample images using DPM-Solver-1 with the same CFG model trained in Assignment 2. Copy and paste your `model.py` implementation from Assignment 2 into the `image_dpm_todo` directory, and complete the TODOs in `image_dpm_todo/scheduler.py`. As in Assignment 2, sample images using the following command:
 
 ```
-python sampling.py --ckpt_path ${CKPT_PATH} --save_dir ${SAVE_DIR_PATH} --use_cfg
+python sampling.py --ckpt_path ${CKPT_PATH} --save_dir ${SAVE_DIR_PATH}
 ```
 
 Measure FID score:
@@ -218,7 +218,7 @@ Submit the zip file on GradeScope.
 Otherwise, you will receive up to 20 points from this assignment that count toward your final grade.
 
 - Task 1
-  - 10 points: Achieve CD lower than 40 on the Swiss-Roll distribution, and achieve FID less than 30 on image generation with CFG.
+  - 10 points: Achieve CD lower than 40 on the Swiss-Roll distribution, and achieve FID less than 30 on image generation with CFG with a scale of 7.5.
   - 5 points: Either achieve CD between 40 and 60, or achieve FID between 30 and 50.
   - 0 point: otherwise.
 - Task 2
