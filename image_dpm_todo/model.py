@@ -13,10 +13,10 @@ class DiffusionModule(nn.Module):
         self.network = network
         self.var_scheduler = var_scheduler
 
-    def get_loss(self, x0, class_label=None, noise=None):
+    def get_loss(self, x0, class_label=None):
         B = x0.shape[0]
         timestep = self.var_scheduler.uniform_sample_t(B, self.device)
-        x_noisy = self.var_scheduler.add_noise(x0, timestep)
+        x_noisy, noise = self.var_scheduler.add_noise(x0, timestep)
         noise_pred = self.network(x_noisy, timestep=timestep, class_label=class_label)
 
         loss = F.mse_loss(noise_pred.flatten(), noise.flatten(), reduction="mean")
@@ -29,6 +29,14 @@ class DiffusionModule(nn.Module):
     @property
     def image_resolution(self):
         return self.network.image_resolution
+
+    def q_sample(self, x0, t, noise=None):
+        t = t.long()
+        if noise is None:
+            noise = torch.randn_like(x0)
+
+        xt, noise = self.var_scheduler.add_noise(x0, t, noise)
+        return xt
 
     @torch.no_grad()
     def sample(

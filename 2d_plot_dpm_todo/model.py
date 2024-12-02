@@ -16,10 +16,10 @@ class DiffusionModule(nn.Module):
         # make the network forward function accessible inside the scheduler for high-order sampling.
         self.var_scheduler.net_forward_fn = self.network.forward
 
-    def get_loss(self, x0, class_label=None, noise=None):
+    def get_loss(self, x0, class_label=None):
         B = x0.shape[0]
         timestep = self.var_scheduler.uniform_sample_t(B, self.device)
-        x_noisy = self.var_scheduler.add_noise(x0, timestep)
+        x_noisy, noise = self.var_scheduler.add_noise(x0, timestep)
         if class_label is not None:
             noise_pred = self.network(x_noisy, timestep, class_label=class_label)
         else:
@@ -40,7 +40,9 @@ class DiffusionModule(nn.Module):
         t = t.long()
         if noise is None:
             noise = torch.randn_like(x0)
-        return self.var_scheduler.add_noise(x0, t, noise)
+
+        xt, noise = self.var_scheduler.add_noise(x0, t, noise)
+        return xt
 
     @torch.no_grad()
     def sample(
