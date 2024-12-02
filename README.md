@@ -131,6 +131,7 @@ For $k \leq 2$, Taylor expansion needs additional intermediate points between $t
 ❗️❗️❗️ **You are only allowed to edit the part marked by TODO.** ❗️❗️❗️
 
 #### 1-1: Implement the forward pass of DPM-Solver.
+Copy and paste your `2d_plot_diffusion_todo/network.py` from Assignment 2 into the `2d_plot_dpm_todo` directory.
 Implement `add_noise()` function in `2d_plot_dpm_todo/scheduler.py` based on Equation 2.1 in the DPM-Solver paper.
 You can use `dpm_alphas`, `dpm_sigmas` and `dpm_lambdas` variables if needed.
 
