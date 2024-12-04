@@ -55,11 +55,13 @@ class DiffusionModule(nn.Module):
         assert guidance_scale > 1.0
 
         ######## TODO ########
-        # Implement the classifier-free guidance.
-        # DO NOT change the code outside this part.
-        # You can copy & paste your implementation of previous Assignments.
+        # Assignment 2-3. Implement the classifier-free guidance.
+        # Specifically, given a tensor of shape (batch_size,) containing class labels,
+        # create a tensor of shape (2*batch_size,) where the first half is filled with zeros (i.e., null condition).
         assert class_label is not None
         assert len(class_label) == batch_size, f"len(class_label) != batch_size. {len(class_label)} != {batch_size}"
+        class_label = torch.cat([torch.zeros_like(class_label), class_label], dim=0)
+        class_label = class_label.to(self.device)
         #######################
 
         traj = [x_T]
@@ -69,7 +71,10 @@ class DiffusionModule(nn.Module):
             # DO NOT change the code outside this part.
             # Implement the classifier-free guidance.
             # You can copy & paste your implementation of previous Assignments.
-            noise_pred = x_t_prev
+            uncond_cemb, cond_cemb = class_label.chunk(2)
+            noise_uncond = self.network(x_t, timestep=t.to(self.device), class_label=uncond_cemb)
+            noise_cond = self.network(x_t, timestep=t.to(self.device), class_label=cond_cemb)
+            noise_pred = (1 + guidance_scale) * noise_cond - guidance_scale * noise_uncond
             x_t_prev = self.var_scheduler.step(x_t, t, noise_pred, class_label=class_label)
             #######################
 

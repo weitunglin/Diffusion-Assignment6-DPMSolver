@@ -136,7 +136,14 @@ class DPMSolverScheduler(BaseScheduler):
         ######## TODO ########
         # DO NOT change the code outside this part.
         alpha_s = extract(self.dpm_alphas, s, x_s)
-        x_t = x_s
+        alpha_t = extract(self.dpm_alphas, t, x_s)
+        sigma_s = extract(self.dpm_sigmas, s, x_s)
+        sigma_t = extract(self.dpm_sigmas, t, x_s)
+
+        first_c = (alpha_t / alpha_s)
+        second_c = alpha_t * ((sigma_s / alpha_s) - (sigma_t / alpha_t))
+
+        x_t = first_c * x_s - second_c * eps_theta
         ######################
         return x_t
 
@@ -231,7 +238,9 @@ class DPMSolverScheduler(BaseScheduler):
         ######## TODO ########
         # DO NOT change the code outside this part.
         # Assignment 6. Implement the DPM forward step.
-        x_t = x_0
+        alphas_t = extract(self.dpm_alphas, t, x_0)
+        sigmas_t = extract(self.dpm_sigmas, t, x_0)
+        x_t = alphas_t * x_0 + sigmas_t * eps
 
         #######################
 

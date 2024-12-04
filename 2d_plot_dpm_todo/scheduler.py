@@ -127,7 +127,14 @@ class DPMSolverScheduler(BaseScheduler):
         ######## TODO ########
         # DO NOT change the code outside this part.
         alpha_s = extract(self.dpm_alphas, s, x_s)
-        x_t = x_s
+        alpha_t = extract(self.dpm_alphas, t, x_s)
+        sigma_s = extract(self.dpm_sigmas, s, x_s)
+        sigma_t = extract(self.dpm_sigmas, t, x_s)
+
+        first_c = (alpha_t / alpha_s)
+        second_c = alpha_t * ((sigma_s / alpha_s) - (sigma_t / alpha_t))
+
+        x_t = first_c * x_s - second_c * eps_theta
         ######################
         return x_t
     
@@ -146,13 +153,56 @@ class DPMSolverScheduler(BaseScheduler):
         """
         ######## TODO ########
         # DO NOT change the code outside this part.
+        # lambda_i1 = extract(self.dpm_lambdas, t_i1, x_ti1)
+        # lambda_i = extract(self.dpm_lambdas, t_i, x_ti1)
+        # alpha_t_i1 = extract(self.dpm_alphas, t_i1, x_ti1)
+        # alpha_t_i = extract(self.dpm_alphas, t_i, x_ti1)
+        # sigma_t_i = extract(self.dpm_sigmas, t_i, x_ti1)
+
+        # s_i = self.inverse_lambda((lambda_i1 + lambda_i)/2)
+        # sigma_s_i = extract(self.dpm_sigmas, s_i, x_ti1)
+        # alpha_s_i = extract(self.dpm_alphas, s_i, x_ti1)
+        # lambda_s_i = extract(self.dpm_lambdas, s_i, x_ti1)
+
+        # u_c_1 = alpha_s_i / alpha_t_i1
+        # u_c_2 = sigma_s_i * (torch.exp((lambda_s_i - lambda_i1) / 2) - 1)
+        # u_i = u_c_1 * x_ti1 - u_c_2 * eps_theta
+
+        # x_c_1 = alpha_t_i / alpha_s_i
+        # x_c_2 = sigma_t_i * (torch.exp(lambda_i - lambda_s_i) - 1)
+        # eps_u_s = self.net_forward_fn(u_i, s_i.to(u_i.device))
+        # x_ti = x_c_1 * x_ti1 - x_c_2 * eps_u_s
+
+        # Get lambda values
         lambda_i1 = extract(self.dpm_lambdas, t_i1, x_ti1)
         lambda_i = extract(self.dpm_lambdas, t_i, x_ti1)
-        s_i = self.inverse_lambda((lambda_i1 + lambda_i)/2)
+        h_i = lambda_i - lambda_i1
+    
+        # Step 3: Calculate s_i using t_λ((λ_{t_{i-1}} + λ_{t_i})/2)
+        s_i = self.inverse_lambda((lambda_i1 + lambda_i) / 2)
+    
+        # Get needed α and σ values
+        alpha_ti1 = extract(self.dpm_alphas, t_i1, x_ti1)
+        alpha_si = extract(self.dpm_alphas, s_i, x_ti1)
+        alpha_ti = extract(self.dpm_alphas, t_i, x_ti1)
+        sigma_si = extract(self.dpm_sigmas, s_i, x_ti1)
+        sigma_ti = extract(self.dpm_sigmas, t_i, x_ti1)
+    
+        # Step 4: Calculate u_i
+        # u_i ← (α_{s_i}/α_{t_{i-1}})x̃_{t_{i-1}} - σ_{s_i}(e^{h_i/2} - 1)ε_θ(x̃_{t_{i-1}}, t_{i-1})
+        u_i = (alpha_si / alpha_ti1) * x_ti1 - sigma_si * (torch.exp(h_i/2) - 1) * eps_theta
+    
+        # Get noise prediction for u_i at time s_i
+        eps_u_s = self.net_forward_fn(u_i, s_i.to(u_i.device))
+    
+        # Step 5: Calculate x̃_{t_i}
+        # x̃_{t_i} ← (α_{t_i}/α_{t_{i-1}})x̃_{t_{i-1}} - σ_{t_i}(e^{h_i} - 1)ε_θ(u_i, s_i)
+        x_ti = (alpha_ti / alpha_ti1) * x_ti1 - sigma_ti * (torch.exp(h_i) - 1) * eps_u_s
+    
 
-        # An example of computing noise prediction inside the function.
-        model_output = self.net_forward_fn(x_ti1, t_i1.to(x_ti1.device))
-        x_ti = x_ti1
+        # # An example of computing noise prediction inside the function.
+        # model_output = self.net_forward_fn(x_ti1, t_i1.to(x_ti1.device))
+        # x_ti = x_ti1
         ######################
 
         return x_ti
@@ -205,7 +255,9 @@ class DPMSolverScheduler(BaseScheduler):
         ######## TODO ########
         # DO NOT change the code outside this part.
         # Assignment 6. Implement the DPM forward step.
-        x_t = x_0
+        alphas_t = extract(self.dpm_alphas, t, x_0)
+        sigmas_t = extract(self.dpm_sigmas, t, x_0)
+        x_t = alphas_t * x_0 + sigmas_t * eps
         
         #######################
 
