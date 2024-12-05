@@ -1,3 +1,9 @@
 **/*.pyc
 __pycache__/
 .ipynb_checkpoints/
+
+image_dpm_todo/results
+image_dpm_todo/results_second_order
+image_dpm_todo/ckpts
+image_dpm_todo/data
+*.ckpt
